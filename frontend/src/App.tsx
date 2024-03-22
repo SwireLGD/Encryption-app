@@ -8,17 +8,18 @@ import ArrowDownward from '@mui/icons-material/ArrowDownward';
 const App: React.FC = () => {
   const [state, setState] = useState<Props>({
     password: '',
-    message: '',
     encodedMessage: '',
     decodedMessage: ''
   });
 
   const handleEncode = async () => {
     if (!state.password) alert('Enter a password!');
+    if (!state.decodedMessage) alert('Enter some text!');
     else {
       try {
-        const response = await axiosApi.post('/encode', { password: state.password, message: state.message });
+        const response = await axiosApi.post('/encode', { password: state.password, message: state.decodedMessage });
         setState(prevState => ({ ...prevState, encodedMessage: response.data.encoded }));
+        console.log(response.data);
       } catch (error) {
         console.error('Something went wrong', error);
       }
@@ -27,10 +28,12 @@ const App: React.FC = () => {
 
   const handleDecode = async () => {
     if (!state.password) alert('Enter a password!');
+    if (!state.encodedMessage) alert('Enter some text!');
     else {
       try {
         const response = await axiosApi.post('/decode', { password: state.password, message: state.encodedMessage });
         setState(prevState => ({ ...prevState, decodedMessage: response.data.decoded }));
+        console.log(response.data);
       } catch (error) {
         console.error('Something went wrong', error);
       }
@@ -72,6 +75,6 @@ const App: React.FC = () => {
       </Grid>
     </Container>
   );
-}
+};
 
 export default App;
